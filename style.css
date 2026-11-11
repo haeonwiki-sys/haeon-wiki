@@ -42,7 +42,18 @@ button { font: inherit; }
 .bar { background: var(--sun); color: var(--sun-ink); }
 .bar-in { max-width: 940px; margin: 0 auto; padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px)); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .bar-in .home { color: var(--sun-ink); font-size: 19px; font-weight: 700; }
-.menu { position: relative; }
+.bar-in { position: relative; }
+.bar-right { display: flex; gap: 8px; }
+.menu { position: static; }
+.bar-in .menu-panel { right: max(16px, env(safe-area-inset-right, 0px)); }
+#share-panel { width: min(380px, calc(100vw - 32px)); display: grid; gap: 8px; }
+.share-now { display: flex; gap: 6px; }
+.share-now input { flex: 1; min-width: 0; font: inherit; font-size: 14px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px; }
+.share-help { font-size: 14px; color: var(--muted); line-height: 1.6; }
+.share-help code, .share-list code { font-size: 13.5px; background: var(--surface); border-radius: 4px; padding: 0 5px; color: var(--sun-text); }
+.share-list { list-style: none; padding: 0; display: grid; }
+.share-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 5px 0; border-top: 1px solid var(--line); font-size: 15px; }
+.share-list li:first-child { border-top: 0; }
 .menu > summary { list-style: none; cursor: pointer; font-size: 15px; font-weight: 600; padding: 5px 12px; border-radius: 7px; background: rgba(255,255,255,0.4); color: var(--sun-ink); }
 .menu > summary::-webkit-details-marker { display: none; }
 .menu-panel { position: absolute; right: 0; top: calc(100% + 8px); width: min(330px, calc(100vw - 32px)); max-height: 72vh; overflow: auto; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 10px 28px rgba(0,0,0,0.18); padding: 12px 16px; z-index: 30; }

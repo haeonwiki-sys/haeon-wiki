@@ -344,11 +344,40 @@ function renderAll() {
   route();
 }
 
+function shareBase() { return location.origin + location.pathname; }
+
+function buildShare() {
+  const here = shareBase() + (location.hash || '');
+  const rows = [S.home].concat(S.docs).map(d => {
+    const url = shareBase() + '#' + d.id;
+    return `<li><span>${esc(d.title)}</span><code>#${d.id}</code><button type="button" class="btn ghost sm" data-copy="${esc(url)}">복사</button></li>`;
+  }).join('');
+  $('#share-panel').innerHTML = `<p class="fl">지금 보고 있는 곳</p>
+    <div class="share-now"><input type="text" readonly value="${esc(here)}" aria-label="지금 보고 있는 곳의 주소"><button type="button" class="btn sm" data-copy="${esc(here)}">복사</button></div>
+    <p class="share-help">주소 끝에 <code>#문서이름</code>을 붙이면 그 문서가 바로 열립니다. 목차에서 조항을 누른 뒤 여기서 복사하면, 그 조항까지 바로 가는 주소가 됩니다.</p>
+    <p class="fl">문서별 주소</p><ul class="share-list">${rows}</ul>`;
+}
+
+async function copyText(text, btn) {
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) {
+    const t = document.createElement('textarea');
+    t.value = text; document.body.append(t); t.select();
+    try { document.execCommand('copy'); } catch (err) { /* 복사 불가 */ }
+    t.remove();
+  }
+  const old = btn.textContent;
+  btn.textContent = '복사됨';
+  setTimeout(() => { btn.textContent = old; }, 1500);
+}
+
+function closeMenus() { $$('.bar .menu').forEach(m => { m.open = false; }); }
+
 function show(id) { $$('#main > .doc').forEach(a => a.classList.toggle('active', a.id === 'doc-' + id)); }
 
 function route() {
   if (S.editing) return;
-  const menu = $('#menu'); if (menu) menu.open = false;
+  closeMenus();
   let h = decodeURIComponent(location.hash.slice(1)) || 'home';
   let id = h.split('--')[0];
   if (id === 'admin') { show('admin'); renderAdmin(); scrollTo(0, 0); return; }
@@ -752,7 +781,12 @@ async function renderAdmin() {
 
 /* ───────── 시작 ───────── */
 
+$('#share').addEventListener('toggle', e => { if (e.target.open) { buildShare(); $('#menu').open = false; } });
+$('#menu').addEventListener('toggle', e => { if (e.target.open) $('#share').open = false; });
 document.addEventListener('click', e => {
+  if (!e.target.closest('.bar .menu')) closeMenus();
+  const cp = e.target.closest('[data-copy]');
+  if (cp) { copyText(cp.dataset.copy, cp); return; }
   const ed = e.target.closest('[data-edit]');
   if (ed) { startEdit(ed.dataset.edit); return; }
   const hi = e.target.closest('[data-history]');
