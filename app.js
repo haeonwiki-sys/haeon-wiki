@@ -8,8 +8,18 @@ import { SEED } from './seed.js';
 
 const FB = 'https://www.gstatic.com/firebasejs/10.12.2/';
 const FLOORS = { 1: '1층 헌장', 2: '2층 운영 문서', 3: '3층 봉사 매뉴얼' };
-const MASTER_ONLY = ['charter', 'common'];
+const MASTER_ONLY = ['charter', 'common', 'home'];
 const FIRST_DATE = '2026-11-10';
+// 대문 처음 내용. 문서 목록과 확인 칸 합계는 data-auto 자리에 자동으로 채워집니다.
+const HOME_SEED = {
+  id: 'home', title: '대문', short: '대문', floor: 0, parent: null, order: 0, sub: '', badge: '',
+  body: '<p class="lead">해온 봉사단의 운영 문서를 모아 둔 곳입니다. 지금 단장 한 사람의 머릿속과 손에 있는 것을 문서로 옮겨, 누가 맡아도 해온이 해온답게 돌아가게 하는 것이 목표입니다.</p>' +
+    '<div class="rules"><div class="rule"><b>위층이 우선</b><p>위층 문서가 아래층 문서보다 우선합니다. 아래 문서는 위 문서와 어긋나게 쓰지 않습니다.</p></div>' +
+    '<div class="rule"><b>없으면 헌장</b><p>매뉴얼에 없는 상황을 만나면 헌장을 펴 보고 판단합니다.</p></div>' +
+    '<div class="rule"><b>번호로 가리키기</b><p>"<a class="xref" data-to="charter--serve-kids"></a>"처럼 문서 이름과 번호로 짚습니다. 누르면 그 조항으로 갑니다.</p></div></div>' +
+    '<p data-auto="ask-total"></p><p data-auto="doc-tree"></p>' +
+    '<div class="tmpl rel"><b>이 위키에 쓰지 않는 것</b><p>연락처, 계좌번호, 회원 개인 기록, 사건 기록은 위키에 쓰지 않고 단장의 운영 노트에 따로 둡니다. 위키는 주소만 알면 누구나 볼 수 있기 때문입니다.</p></div>',
+};
 
 const S = {
   docs: [], byId: {}, NUM: {}, ASKS: {},
@@ -47,18 +57,27 @@ async function initFirebase() {
 
 function seedDocs() { return SEED.map(d => ({ ...d, stored: false, version: 0 })); }
 
+function index() {
+  S.docs.sort((a, b) => (a.floor - b.floor) || (a.order - b.order));
+  S.byId = Object.fromEntries(S.docs.map(d => [d.id, d]));
+  S.byId.home = S.home;
+}
+
 async function loadDocs() {
+  let home = null;
   if (S.preview) {
     S.docs = seedDocs();
   } else {
     const { F, db } = S.fb;
     const snap = await F.getDocs(F.collection(db, 'docs'));
     const stored = snap.docs.map(s => ({ id: s.id, ...s.data(), stored: true }));
-    const have = new Set(stored.map(d => d.id));
-    S.docs = stored.concat(seedDocs().filter(d => !have.has(d.id)));
+    home = stored.find(d => d.id === 'home') || null;
+    const rest = stored.filter(d => d.id !== 'home');
+    const have = new Set(rest.map(d => d.id));
+    S.docs = rest.concat(seedDocs().filter(d => !have.has(d.id)));
   }
-  S.docs.sort((a, b) => (a.floor - b.floor) || (a.order - b.order));
-  S.byId = Object.fromEntries(S.docs.map(d => [d.id, d]));
+  S.home = home || { ...HOME_SEED, stored: false, version: 0 };
+  index();
 }
 
 function fmt(ts) {
@@ -79,8 +98,9 @@ const ALLOW = {
 };
 const CLASSES = {
   P: ['lead', 'note'], SPAN: ['ask', 'help', 'axis'], A: ['xref'], TABLE: ['wtable', 'kv'], TR: ['item'],
-  TD: ['item-n', 'nm', 'ds', 'fq'], DIV: ['twrap', 'stack'], SECTION: ['fns'], DL: ['meta'],
+  TD: ['item-n', 'nm', 'ds', 'fq'], DIV: ['twrap', 'stack', 'rules', 'rule', 'tmpl', 'rel'], SECTION: ['fns'], DL: ['meta'],
 };
+const AUTO = /^(stats|help-list|doc-tree|ask-total)$/;
 const BLOCKS = /^(P|H2|H3|OL|UL|TABLE|DIV|SECTION|BLOCKQUOTE|DL)$/;
 
 function unwrap(el) { el.replaceWith(...Array.from(el.childNodes)); }
@@ -97,7 +117,7 @@ function clean(node) {
     if (ch.nodeType !== 1) { ch.remove(); continue; }
     let el = ch;
     if (/^(SCRIPT|STYLE|IFRAME|OBJECT|EMBED|TEMPLATE|META|LINK)$/.test(el.tagName)) { el.remove(); continue; }
-    if (el.tagName === 'DIV' && !el.classList.contains('twrap')) {
+    if (el.tagName === 'DIV' && !CLASSES.DIV.some(c => el.classList.contains(c))) {
       if (Array.from(el.children).some(c => BLOCKS.test(c.tagName))) { clean(el); unwrap(el); continue; }
       el = rename(el, 'P');
     }
@@ -124,7 +144,7 @@ function clean(node) {
       }
     }
     if (el.tagName === 'P' && el.hasAttribute('data-auto')) {
-      if (!/^(stats|help-list)$/.test(el.getAttribute('data-auto'))) el.removeAttribute('data-auto');
+      if (!AUTO.test(el.getAttribute('data-auto'))) el.removeAttribute('data-auto');
       else { el.textContent = ''; continue; }
     }
     clean(el);
@@ -270,17 +290,17 @@ function buildHome(home) {
         return `<li><span><a href="#${d.id}">${esc(d.title)}</a>${d.sub ? `<span class="sub">${esc(d.sub)}</span>` : ''}</span><span class="cnt${c ? '' : ' zero'}">${c ? '확인 ' + c : '확인 없음'}</span></li>`;
       }).join('') + '</ul></section>';
   }).join('');
-  home.innerHTML = `<div class="doc-head"><h1>해온 위키</h1><p class="edited">해온 봉사단 운영 문서</p></div>
-    <p class="lead">해온 봉사단의 운영 문서를 모아 둔 곳입니다. 지금 단장 한 사람의 머릿속과 손에 있는 것을 문서로 옮겨, 누가 맡아도 해온이 해온답게 돌아가게 하는 것이 목표입니다.</p>
-    <div class="rules">
-      <div class="rule"><b>위층이 우선</b><span>위층 문서가 아래층 문서보다 우선합니다. 아래 문서는 위 문서와 어긋나게 쓰지 않습니다.</span></div>
-      <div class="rule"><b>없으면 헌장</b><span>매뉴얼에 없는 상황을 만나면 헌장을 펴 보고 판단합니다.</span></div>
-      <div class="rule"><b>번호로 가리키기</b><span>"<a class="xref" data-to="charter--serve-kids"></a>"처럼 문서 이름과 번호로 짚습니다. 누르면 그 조항으로 갑니다.</span></div>
-    </div>
-    ${total ? `<div class="tmpl draft"><b>확인이 필요한 칸이 ${total}곳 있습니다.</b><p>문서마다 맨 위에 확인할 칸이 모여 있습니다.</p></div>` : ''}
-    <div class="tree">${tree}</div>
-    <div class="tmpl rel"><b>이 위키에 쓰지 않는 것</b><p>연락처, 계좌번호, 회원 개인 기록, 사건 기록은 위키에 쓰지 않고 단장의 운영 노트에 따로 둡니다. 위키는 주소만 알면 누구나 볼 수 있기 때문입니다.</p></div>
+  const h = S.home;
+  const when = fmt(h.updatedAt) || FIRST_DATE;
+  const by = h.updatedBy ? ' · ' + esc(h.updatedBy) : '';
+  home.innerHTML = `<div class="doc-head"><h1>해온 위키</h1><div class="head-row"><p class="edited">최근 수정: ${when}${by}</p>
+    <div class="actions"><button type="button" class="btn sm" data-edit="home">편집</button><button type="button" class="btn ghost sm" data-history="home">역사</button></div></div></div>
+    <div class="content wbody">${sanitize(h.body)}</div>
     <div class="doc-foot"><div class="links"><a href="#admin">관리</a></div></div>`;
+  $$('[data-auto="ask-total"]', home).forEach(p => {
+    p.outerHTML = total ? `<div class="tmpl draft"><b>확인이 필요한 칸이 ${total}곳 있습니다.</b><p>문서마다 맨 위에 확인할 칸이 모여 있습니다.</p></div>` : '';
+  });
+  $$('[data-auto="doc-tree"]', home).forEach(p => { p.outerHTML = `<div class="tree">${tree}</div>`; });
   fillXrefs(home);
 }
 
@@ -748,7 +768,8 @@ addEventListener('beforeunload', e => {
     console.error(e);
     S.loadError = true;
     S.docs = seedDocs();
-    S.byId = Object.fromEntries(S.docs.map(d => [d.id, d]));
+    S.home = { ...HOME_SEED, stored: false, version: 0 };
+    index();
   }
   renderAll();
   if (S.preview) window.__haeon = { S, startEdit, sanitize, finalize };

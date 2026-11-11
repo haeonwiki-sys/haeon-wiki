@@ -22,7 +22,7 @@ service cloud.firestore {
         && get(grantPath(key)).data.code == get(secretPath(key)).data.code;
     }
     function isMaster() { return hasGrant('master'); }
-    function masterOnly(docId) { return docId in ['charter', 'common']; }
+    function masterOnly(docId) { return docId in ['charter', 'common', 'home']; }
     function canEdit(docId) { return isMaster() || (!masterOnly(docId) && hasGrant(docId)); }
     function validDoc() {
       let d = request.resource.data;

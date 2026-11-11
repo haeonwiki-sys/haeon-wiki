@@ -142,7 +142,8 @@ sup a { margin-left: 1px; }
 .rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .rule { background: var(--surface); border-radius: 8px; padding: 14px 16px; display: grid; gap: 4px; align-content: start; font-size: 15.5px; }
 .rule b { font-size: 16.5px; }
-.rule span { color: var(--muted); }
+.rule p, .rule span { color: var(--muted); }
+.tmpl b { font-size: 16.5px; }
 .tree { display: grid; gap: 14px; }
 .floor { border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; display: grid; gap: 6px; }
 .floor.f1 { background: var(--sun-soft); border-color: var(--sun-line); }
@@ -174,6 +175,8 @@ sup a { margin-left: 1px; }
 .ed-area [data-auto] { color: var(--muted); font-size: 14px; border: 1px dashed var(--line); border-radius: 6px; padding: 6px 10px; }
 .ed-area [data-auto="stats"]::before { content: "자동으로 채워지는 칸: 업무 통계"; }
 .ed-area [data-auto="help-list"]::before { content: "자동으로 채워지는 칸: 도움 구함 표시된 업무 목록"; }
+.ed-area [data-auto="doc-tree"]::before { content: "자동으로 채워지는 칸: 층별 문서 목록"; }
+.ed-area [data-auto="ask-total"]::before { content: "자동으로 채워지는 칸: 확인 필요 칸 합계"; }
 .ed-sum { display: grid; gap: 4px; font-size: 14.5px; color: var(--muted); }
 .ed-sum input, .code-form input, .adm input { font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 7px; padding: 7px 10px; width: 100%; }
 .ed-actions { display: flex; gap: 8px; }
