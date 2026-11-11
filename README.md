@@ -3,6 +3,8 @@
 해온 봉사단의 헌장, 운영 문서, 봉사 매뉴얼을 모아 둔 위키입니다.
 주소만 알면 누구나 볼 수 있고, 고치는 것은 코드를 아는 사람만 할 수 있습니다.
 
+주소: https://haeon-wiki.web.app (파이어베이스 호스팅)
+
 ## 문서 구조
 
 | 층 | 문서 | 누가 고칠 수 있나 |
@@ -31,7 +33,7 @@
    - 컬렉션 ID: `secrets`
    - 문서 ID: `master`
    - 필드: `code` (유형: string), 값: 단장 코드 (8자 이상)
-4. **사이트 켜기**: 깃허브 저장소 → Settings → Pages → Branch를 `main`, 폴더를 `/ (root)`로 두고 Save.
+4. **자동 배포 열쇠 넣기**: 구글 클라우드 콘솔에서 서비스 계정(역할: Firebase 관리자, API 키 뷰어)의 JSON 키를 만들고, 깃허브 저장소 → Settings → Secrets and variables → Actions에 `FIREBASE_SERVICE_ACCOUNT`라는 이름으로 넣습니다. 이후 main에 올라오는 내용은 `.github/workflows/deploy.yml`이 파이어베이스 호스팅에 자동으로 올립니다. 키 파일은 채팅이나 카톡에 붙여 넣지 않습니다.
 5. **처음 문서 넣기**: 사이트 주소 뒤에 `#admin`을 붙여 관리 화면으로 가서 구글 로그인 → 단장 코드 입력 → "처음 문서 넣기" → 문서 코드 정하기.
 
 ## 코드 관리
