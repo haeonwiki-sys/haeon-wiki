@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>해온 위키</title>
+<meta name="description" content="해온 봉사단의 헌장, 운영 문서, 봉사 매뉴얼">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <a class="home" href="#home">해온 위키</a>
+  <details class="menu" id="menu"><summary>문서 목록</summary><div class="menu-panel" id="menu-panel"></div></details>
+</div></div>
+<div class="banner" id="banner" hidden></div>
+<main class="wrap" id="main"><p class="loading">문서를 불러오는 중입니다…</p></main>
+<div class="modal" id="modal" hidden><div class="modal-box" role="dialog" aria-modal="true"><button type="button" class="modal-x" aria-label="닫기">×</button><div id="modal-body"></div></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>

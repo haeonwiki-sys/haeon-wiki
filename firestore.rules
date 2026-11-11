@@ -1,0 +1,78 @@
+rules_version = '2';
+
+// 해온 위키 보안 규칙
+// - 문서 보기: 누구나
+// - 문서 고치기: 구글 로그인 + 코드
+//     단장 코드(secrets/master) → 모든 문서, 모든 코드 변경
+//     문서 코드(secrets/<문서 id>) → 그 문서만
+//     헌장(charter)과 공통 매뉴얼(common)은 단장 코드로만
+// - 코드는 secrets 컬렉션에 두고, 누구도 읽을 수 없습니다.
+// - 코드를 입력하면 grants/<사용자 id>_<문서 id> 에 기록되고,
+//   그 기록이 지금 코드와 같을 때만 고칠 수 있습니다. 코드를 바꾸면 이전 기록은 바로 막힙니다.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function secretPath(key) { return /databases/$(database)/documents/secrets/$(key); }
+    function grantPath(key) { return /databases/$(database)/documents/grants/$(request.auth.uid + '_' + key); }
+    function hasGrant(key) {
+      return signedIn()
+        && exists(grantPath(key))
+        && exists(secretPath(key))
+        && get(grantPath(key)).data.code == get(secretPath(key)).data.code;
+    }
+    function isMaster() { return hasGrant('master'); }
+    function masterOnly(docId) { return docId in ['charter', 'common']; }
+    function canEdit(docId) { return isMaster() || (!masterOnly(docId) && hasGrant(docId)); }
+    function validDoc() {
+      let d = request.resource.data;
+      return d.body is string && d.body.size() < 500000
+        && d.title is string && d.updatedBy is string && d.version is int;
+    }
+    function sameMeta() {
+      let n = request.resource.data;
+      let o = resource.data;
+      return n.title == o.title && n.floor == o.floor && n.parent == o.parent && n.order == o.order;
+    }
+
+    match /docs/{docId} {
+      allow read: if true;
+      allow create: if canEdit(docId) && validDoc();
+      allow update: if canEdit(docId) && validDoc() && (isMaster() || sameMeta());
+      allow delete: if isMaster();
+
+      match /revisions/{revId} {
+        allow read: if true;
+        allow create: if canEdit(docId) && request.resource.data.body is string;
+        allow update, delete: if false;
+      }
+    }
+
+    match /secrets/{key} {
+      allow read: if false;
+      allow create, update: if isMaster()
+        && request.resource.data.keys().hasOnly(['code'])
+        && request.resource.data.code is string
+        && request.resource.data.code.size() >= 4
+        && (key != 'master' || request.resource.data.code.size() >= 8);
+      allow delete: if isMaster();
+    }
+
+    match /codeinfo/{key} {
+      allow read, write: if isMaster();
+    }
+
+    match /grants/{gid} {
+      allow get, delete: if signedIn() && gid.matches(request.auth.uid + '_.+');
+      allow list: if false;
+      allow create, update: if signedIn()
+        && gid == request.auth.uid + '_' + request.resource.data.key
+        && request.resource.data.keys().hasOnly(['uid', 'key', 'code', 'at'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.key is string
+        && (request.resource.data.key == 'master' || !masterOnly(request.resource.data.key))
+        && exists(secretPath(request.resource.data.key))
+        && request.resource.data.code == get(secretPath(request.resource.data.key)).data.code;
+    }
+  }
+}
