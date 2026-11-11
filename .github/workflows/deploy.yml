@@ -1,0 +1,24 @@
+# main에 올라온 내용을 파이어베이스 호스팅(haeon-wiki.web.app)에 자동으로 배포합니다.
+# 저장소 비밀값 FIREBASE_SERVICE_ACCOUNT(서비스 계정 키 JSON)가 있어야 동작하고, 없으면 건너뜁니다.
+name: 해온 위키 배포
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -n "$SA" ]; then echo "ok=yes" >> "$GITHUB_OUTPUT"; else echo "ok=no" >> "$GITHUB_OUTPUT"; echo "FIREBASE_SERVICE_ACCOUNT 비밀값이 없어 배포를 건너뜁니다."; fi
+      - if: steps.check.outputs.ok == 'yes'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          channelId: live
+          projectId: haeon-wiki
