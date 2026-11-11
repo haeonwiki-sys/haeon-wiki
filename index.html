@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>해온 위키</title>
+<script>
+  // 예전 주소(github.io)로 들어오면 새 주소로 보냅니다. 문서 위치(#...)는 그대로 유지합니다.
+  if (location.hostname.endsWith('github.io')) location.replace('https://haeon-wiki.web.app/' + location.hash);
+</script>
 <meta name="description" content="해온 봉사단의 헌장, 운영 문서, 봉사 매뉴얼">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
