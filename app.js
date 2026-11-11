@@ -174,6 +174,12 @@ function buildArticle(d) {
   content.className = 'content wbody';
   content.innerHTML = sanitize(d.body);
   art.append(content);
+  // 각주 번호 [1]을 왼쪽 칸으로 떼어 내기
+  $$('.fns li', content).forEach(li => {
+    const t = li.firstChild;
+    const m = t && t.nodeType === 3 && t.textContent.match(/^\s*(\[\d+\])\s*/);
+    if (m) { t.textContent = t.textContent.slice(m[0].length); li.insertAdjacentHTML('afterbegin', `<span class="fn-n">${m[1]}</span>`); }
+  });
 
   let n2 = 0, n3 = 0, last = '', curH2 = null;
   const toc = [], asks = [], items = [], areas = new Set();
