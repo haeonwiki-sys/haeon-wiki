@@ -1,38 +1,38 @@
 {
  "boss": {
   "title": "현재 단장이 하는 일",
-  "version": 2,
-  "updatedAt": "2026-11-12T13:20:37.449Z",
+  "version": 3,
+  "updatedAt": "2026-11-12T14:28:51.718Z",
   "updatedBy": "Claude"
  },
  "canvas": {
   "title": "희망캔버스 협력 활동",
-  "version": 2,
-  "updatedAt": "2026-11-12T13:20:38.055Z",
+  "version": 3,
+  "updatedAt": "2026-11-12T14:28:52.215Z",
   "updatedBy": "Claude"
  },
  "cats": {
   "title": "하늘을나는고양이",
-  "version": 3,
-  "updatedAt": "2026-11-12T13:28:44.268Z",
+  "version": 4,
+  "updatedAt": "2026-11-12T14:28:52.604Z",
   "updatedBy": "Claude"
  },
  "charter": {
   "title": "해온 헌장",
-  "version": 4,
-  "updatedAt": "2026-11-12T13:20:38.954Z",
+  "version": 5,
+  "updatedAt": "2026-11-12T14:28:53.668Z",
   "updatedBy": "Claude"
  },
  "common": {
   "title": "공통 매뉴얼",
-  "version": 2,
-  "updatedAt": "2026-11-12T13:20:39.383Z",
+  "version": 3,
+  "updatedAt": "2026-11-12T14:28:54.210Z",
   "updatedBy": "Claude"
  },
  "dongheng": {
   "title": "참아름다운동행",
-  "version": 4,
-  "updatedAt": "2026-11-12T13:25:17.191Z",
+  "version": 5,
+  "updatedAt": "2026-11-12T14:28:54.580Z",
   "updatedBy": "Claude"
  },
  "home": {
@@ -43,38 +43,38 @@
  },
  "kara": {
   "title": "카라 더봄센터",
-  "version": 2,
-  "updatedAt": "2026-11-12T13:20:40.595Z",
+  "version": 3,
+  "updatedAt": "2026-11-12T14:28:54.951Z",
   "updatedBy": "Claude"
  },
  "nuri": {
   "title": "누리사랑복지센터",
-  "version": 2,
-  "updatedAt": "2026-11-12T13:20:41.014Z",
+  "version": 3,
+  "updatedAt": "2026-11-12T14:28:55.317Z",
   "updatedBy": "Claude"
  },
  "proc": {
   "title": "공통 절차",
-  "version": 2,
-  "updatedAt": "2026-11-12T13:20:42.134Z",
+  "version": 3,
+  "updatedAt": "2026-11-12T14:28:55.714Z",
   "updatedBy": "Claude"
  },
  "sinae": {
   "title": "신애원",
-  "version": 2,
-  "updatedAt": "2026-11-12T13:20:42.547Z",
+  "version": 3,
+  "updatedAt": "2026-11-12T14:28:56.101Z",
   "updatedBy": "Claude"
  },
  "sion": {
   "title": "시온원",
-  "version": 2,
-  "updatedAt": "2026-11-12T13:20:42.949Z",
+  "version": 3,
+  "updatedAt": "2026-11-12T14:28:56.447Z",
   "updatedBy": "Claude"
  },
  "uijeongbu": {
   "title": "의정부영아원",
-  "version": 2,
-  "updatedAt": "2026-11-12T13:20:43.367Z",
+  "version": 3,
+  "updatedAt": "2026-11-12T14:28:56.815Z",
   "updatedBy": "Claude"
  }
 }
