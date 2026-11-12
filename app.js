@@ -166,6 +166,54 @@ function headingText(el) {
     .map(n => n.textContent).join('').trim();
 }
 
+// 각주를 본문에 처음 나온 순서대로 1, 2, 3… 다시 매기기 (나무위키처럼). 원본의 id는 그대로 둔다.
+function renumberFootnotes(root) {
+  const lis = $$('.fns li[id]', root);
+  if (!lis.length) return;
+  const byId = new Map(lis.map(li => [li.id, li]));
+  const order = [];
+  const refs = $$('sup a[href^="#"]', root).filter(a => byId.has(decodeURIComponent(a.getAttribute('href').slice(1))));
+  refs.forEach(a => { const id = decodeURIComponent(a.getAttribute('href').slice(1)); if (!order.includes(id)) order.push(id); });
+  lis.forEach(li => { if (!order.includes(li.id)) order.push(li.id); });
+  const num = new Map(order.map((id, i) => [id, i + 1]));
+  refs.forEach(a => { a.textContent = `[${num.get(decodeURIComponent(a.getAttribute('href').slice(1)))}]`; });
+  order.forEach(id => {
+    const li = byId.get(id), n = num.get(id), t = li.firstChild;
+    if (t && t.nodeType === 3 && /^\s*\[\d+\]/.test(t.textContent)) t.textContent = t.textContent.replace(/^\s*\[\d+\]/, `[${n}]`);
+    else li.insertBefore(document.createTextNode(`[${n}]`), li.firstChild);
+    li.parentNode.appendChild(li);
+  });
+}
+
+/* 각주 팝업: 본문의 [n]을 누르면(마우스는 올리면) 각주 내용을 바로 보여 준다 */
+let fnTimer = null;
+function fnTarget(a) {
+  if (!a || S.editing || a.closest('.ed-area')) return null;
+  const li = document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));
+  return li && li.closest('.fns') ? li : null;
+}
+function closeFnPop() { clearTimeout(fnTimer); const p = $('#fn-pop'); if (p) p.remove(); }
+function openFnPop(a, li) {
+  closeFnPop();
+  const pop = document.createElement('div');
+  pop.id = 'fn-pop'; pop.className = 'fn-pop'; pop.setAttribute('role', 'tooltip');
+  const n = $('.fn-n', li);
+  const body = li.cloneNode(true); const bn = $('.fn-n', body); if (bn) bn.remove();
+  pop.innerHTML = `<b>${n ? n.textContent : a.textContent}</b>`;
+  pop.append(...body.childNodes);
+  document.body.append(pop);
+  const r = a.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+  let left = r.left + r.width / 2 - w / 2;
+  left = Math.max(12, Math.min(left, document.documentElement.clientWidth - w - 12));
+  let top = r.bottom + 8;
+  if (top + h > innerHeight - 8 && r.top - h - 8 > 0) top = r.top - h - 8;
+  pop.style.left = left + scrollX + 'px';
+  pop.style.top = top + scrollY + 'px';
+  pop.dataset.for = a.getAttribute('href');
+  pop.addEventListener('mouseenter', () => clearTimeout(fnTimer));
+  pop.addEventListener('mouseleave', () => { fnTimer = setTimeout(closeFnPop, 200); });
+}
+
 function buildArticle(d) {
   const art = document.createElement('article');
   art.className = 'doc';
@@ -174,6 +222,7 @@ function buildArticle(d) {
   content.className = 'content wbody';
   content.innerHTML = sanitize(d.body);
   art.append(content);
+  renumberFootnotes(content);
   // 각주 번호 [1]을 왼쪽 칸으로 떼어 내기
   $$('.fns li', content).forEach(li => {
     const t = li.firstChild;
@@ -785,6 +834,14 @@ $('#share').addEventListener('toggle', e => { if (e.target.open) { buildShare();
 $('#menu').addEventListener('toggle', e => { if (e.target.open) $('#share').open = false; });
 document.addEventListener('click', e => {
   if (!e.target.closest('.bar .menu')) closeMenus();
+  const fa = e.target.closest('sup a[href^="#"]'), fli = fnTarget(fa);
+  if (fli) {
+    e.preventDefault();
+    const p = $('#fn-pop');
+    if (p && p.dataset.for === fa.getAttribute('href') && !matchMedia('(hover: hover)').matches) closeFnPop(); else openFnPop(fa, fli);
+    return;
+  }
+  if (!e.target.closest('#fn-pop')) closeFnPop();
   const cp = e.target.closest('[data-copy]');
   if (cp) { copyText(cp.dataset.copy, cp); return; }
   const ed = e.target.closest('[data-edit]');
@@ -793,8 +850,18 @@ document.addEventListener('click', e => {
   if (hi) { showHistory(hi.dataset.history); return; }
 });
 $('#modal').addEventListener('click', e => { if (e.target.id === 'modal' || e.target.closest('.modal-x')) closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#modal').hidden) closeModal(); });
-addEventListener('hashchange', route);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeFnPop(); if (!$('#modal').hidden) closeModal(); } });
+addEventListener('hashchange', () => { closeFnPop(); route(); });
+addEventListener('resize', closeFnPop);
+if (matchMedia('(hover: hover)').matches) {
+  document.addEventListener('mouseover', e => {
+    const a = e.target.closest('sup a[href^="#"]'), li = fnTarget(a);
+    if (li) { clearTimeout(fnTimer); const p = $('#fn-pop'); if (!p || p.dataset.for !== a.getAttribute('href')) openFnPop(a, li); }
+  });
+  document.addEventListener('mouseout', e => {
+    if (fnTarget(e.target.closest('sup a[href^="#"]'))) fnTimer = setTimeout(closeFnPop, 200);
+  });
+}
 addEventListener('beforeunload', e => {
   const area = $('#editor .ed-area');
   if (S.editing && area && area.innerHTML !== S.editStart) { e.preventDefault(); e.returnValue = ''; }

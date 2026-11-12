@@ -143,12 +143,14 @@ details.sec:not([open]) > summary::before { transform: rotate(-90deg); }
 table.kv th { width: 9em; color: var(--muted); font-weight: 500; background: var(--surface); }
 
 sup { line-height: 0; font-size: 12.5px; }
-sup a { margin-left: 1px; }
+sup a { margin-left: 1px; padding: 2px 1px; }
 .fns { border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 4px; font-size: 15px; }
 .fns-title { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
 .wbody section.fns ol { list-style: none; padding: 0; display: grid; gap: 4px; }
 .fns li { position: relative; padding-left: 40px; }
 .fns .fn-n { position: absolute; left: 0; top: 0; color: var(--muted); }
+.fn-pop { position: absolute; z-index: 40; width: max-content; max-width: min(360px, calc(100vw - 24px)); background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.18); padding: 10px 14px; font-size: 15px; line-height: 1.6; }
+.fn-pop b { color: var(--sun-text); margin-right: 6px; font-weight: 700; }
 
 /* ── 대문 ── */
 .rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
