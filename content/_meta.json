@@ -1,0 +1,80 @@
+{
+ "boss": {
+  "title": "현재 단장이 하는 일",
+  "version": 1,
+  "updatedAt": "2026-11-11T09:57:31.565Z",
+  "updatedBy": "Haeon Wiki"
+ },
+ "canvas": {
+  "title": "희망캔버스 협력 활동",
+  "version": 1,
+  "updatedAt": "2026-11-11T09:57:34.458Z",
+  "updatedBy": "Haeon Wiki"
+ },
+ "cats": {
+  "title": "하늘을나는고양이",
+  "version": 1,
+  "updatedAt": "2026-11-11T09:57:33.693Z",
+  "updatedBy": "Haeon Wiki"
+ },
+ "charter": {
+  "title": "해온 헌장",
+  "version": 3,
+  "updatedAt": "2026-11-11T10:06:26.474Z",
+  "updatedBy": "Haeon Wiki"
+ },
+ "common": {
+  "title": "공통 매뉴얼",
+  "version": 1,
+  "updatedAt": "2026-11-11T09:57:32.351Z",
+  "updatedBy": "Haeon Wiki"
+ },
+ "dongheng": {
+  "title": "참아름다운동행",
+  "version": 2,
+  "updatedAt": "2026-11-11T10:31:58.255Z",
+  "updatedBy": "Haeon Wiki"
+ },
+ "home": {
+  "title": "대문",
+  "version": 1,
+  "updatedAt": "2026-11-11T10:05:19.854Z",
+  "updatedBy": "Haeon Wiki"
+ },
+ "kara": {
+  "title": "카라 더봄센터",
+  "version": 1,
+  "updatedAt": "2026-11-11T09:57:34.200Z",
+  "updatedBy": "Haeon Wiki"
+ },
+ "nuri": {
+  "title": "누리사랑복지센터",
+  "version": 1,
+  "updatedAt": "2026-11-11T09:57:33.120Z",
+  "updatedBy": "Haeon Wiki"
+ },
+ "proc": {
+  "title": "공통 절차",
+  "version": 1,
+  "updatedAt": "2026-11-11T09:57:32.021Z",
+  "updatedBy": "Haeon Wiki"
+ },
+ "sinae": {
+  "title": "신애원",
+  "version": 1,
+  "updatedAt": "2026-11-11T09:57:32.614Z",
+  "updatedBy": "Haeon Wiki"
+ },
+ "sion": {
+  "title": "시온원",
+  "version": 1,
+  "updatedAt": "2026-11-11T09:57:33.952Z",
+  "updatedBy": "Haeon Wiki"
+ },
+ "uijeongbu": {
+  "title": "의정부영아원",
+  "version": 1,
+  "updatedAt": "2026-11-11T09:57:33.434Z",
+  "updatedBy": "Haeon Wiki"
+ }
+}
