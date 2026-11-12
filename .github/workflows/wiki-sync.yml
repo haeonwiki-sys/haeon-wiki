@@ -1,0 +1,35 @@
+# content/ 의 문서 파일이 바뀌면 파이어베이스 위키에 반영하고, 위키 내용을 다시 content/ 로 내보냅니다.
+# ops/export-request 를 바꿔 올리면 반영 없이 내보내기만 합니다.
+name: 위키 내용 동기화
+on:
+  push:
+    branches: [main]
+    paths: ['content/**', 'ops/export-request']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: wiki-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-save --no-package-lock firebase-admin@12
+      - env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          BEFORE: ${{ github.event.before }}
+          MSG: ${{ github.event.head_commit.message }}
+        run: node ops/sync.mjs
+      - run: |
+          git config user.name "haeon-wiki-bot"
+          git config user.email "haeonwiki-sys@users.noreply.github.com"
+          git add content ops/last-result.json
+          git diff --cached --quiet || git commit -m "위키 내용 내보내기 (자동)"
+          git push
