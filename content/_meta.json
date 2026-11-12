@@ -1,80 +1,80 @@
 {
  "boss": {
   "title": "현재 단장이 하는 일",
-  "version": 3,
-  "updatedAt": "2026-11-12T14:28:51.718Z",
-  "updatedBy": "Claude"
+  "version": 5,
+  "updatedAt": "2026-11-12T18:31:00.332Z",
+  "updatedBy": "구름늘보"
  },
  "canvas": {
   "title": "희망캔버스 협력 활동",
-  "version": 3,
-  "updatedAt": "2026-11-12T14:28:52.215Z",
-  "updatedBy": "Claude"
+  "version": 5,
+  "updatedAt": "2026-11-12T18:18:44.113Z",
+  "updatedBy": "구름늘보"
  },
  "cats": {
   "title": "하늘을나는고양이",
-  "version": 4,
-  "updatedAt": "2026-11-12T14:28:52.604Z",
-  "updatedBy": "Claude"
+  "version": 6,
+  "updatedAt": "2026-11-12T17:30:09.125Z",
+  "updatedBy": "구름늘보"
  },
  "charter": {
   "title": "해온 헌장",
-  "version": 5,
-  "updatedAt": "2026-11-12T14:28:53.668Z",
-  "updatedBy": "Claude"
+  "version": 7,
+  "updatedAt": "2026-11-12T18:11:43.781Z",
+  "updatedBy": "구름늘보"
  },
  "common": {
   "title": "공통 매뉴얼",
-  "version": 3,
-  "updatedAt": "2026-11-12T14:28:54.210Z",
+  "version": 4,
+  "updatedAt": "2026-11-12T18:43:21.417Z",
   "updatedBy": "Claude"
  },
  "dongheng": {
   "title": "참아름다운동행",
-  "version": 5,
-  "updatedAt": "2026-11-12T14:28:54.580Z",
-  "updatedBy": "Claude"
+  "version": 7,
+  "updatedAt": "2026-11-12T17:21:30.529Z",
+  "updatedBy": "구름늘보"
  },
  "home": {
   "title": "대문",
-  "version": 3,
-  "updatedAt": "2026-11-12T13:26:09.323Z",
+  "version": 4,
+  "updatedAt": "2026-11-12T18:43:21.944Z",
   "updatedBy": "Claude"
  },
  "kara": {
   "title": "카라 더봄센터",
-  "version": 3,
-  "updatedAt": "2026-11-12T14:28:54.951Z",
-  "updatedBy": "Claude"
+  "version": 4,
+  "updatedAt": "2026-11-12T18:23:23.471Z",
+  "updatedBy": "구름늘보"
  },
  "nuri": {
   "title": "누리사랑복지센터",
-  "version": 3,
-  "updatedAt": "2026-11-12T14:28:55.317Z",
-  "updatedBy": "Claude"
+  "version": 5,
+  "updatedAt": "2026-11-12T18:29:40.879Z",
+  "updatedBy": "구름늘보"
  },
  "proc": {
   "title": "공통 절차",
-  "version": 3,
-  "updatedAt": "2026-11-12T14:28:55.714Z",
-  "updatedBy": "Claude"
+  "version": 5,
+  "updatedAt": "2026-11-12T17:11:59.135Z",
+  "updatedBy": "구름늘보"
  },
  "sinae": {
   "title": "신애원",
-  "version": 3,
-  "updatedAt": "2026-11-12T14:28:56.101Z",
-  "updatedBy": "Claude"
+  "version": 5,
+  "updatedAt": "2026-11-12T17:19:24.154Z",
+  "updatedBy": "구름늘보"
  },
  "sion": {
   "title": "시온원",
-  "version": 3,
-  "updatedAt": "2026-11-12T14:28:56.447Z",
-  "updatedBy": "Claude"
+  "version": 5,
+  "updatedAt": "2026-11-12T18:26:29.011Z",
+  "updatedBy": "구름늘보"
  },
  "uijeongbu": {
   "title": "의정부영아원",
-  "version": 3,
-  "updatedAt": "2026-11-12T14:28:56.815Z",
-  "updatedBy": "Claude"
+  "version": 5,
+  "updatedAt": "2026-11-12T17:26:57.698Z",
+  "updatedBy": "구름늘보"
  }
 }
