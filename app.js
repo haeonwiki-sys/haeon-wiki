@@ -97,7 +97,7 @@ const ALLOW = {
   DIV: ['class'], SECTION: ['class', 'data-end'], BLOCKQUOTE: [], CITE: [], DL: ['class'], DT: [], DD: [],
 };
 const CLASSES = {
-  P: ['lead', 'note'], SPAN: ['ask', 'help', 'axis'], A: ['xref'], TABLE: ['wtable', 'kv'], TR: ['item'],
+  P: ['lead', 'note', 'fns-title'], SPAN: ['ask', 'help', 'axis'], A: ['xref'], TABLE: ['wtable', 'kv'], TR: ['item'],
   TD: ['item-n', 'nm', 'ds', 'fq'], DIV: ['twrap', 'stack', 'rules', 'rule', 'tmpl', 'rel'], SECTION: ['fns'], DL: ['meta'],
 };
 const AUTO = /^(stats|help-list|doc-tree|ask-total)$/;
