@@ -293,7 +293,7 @@ function buildHome(home) {
     return `<section class="floor f${f}"><h2><span class="lv">${f}층</span>${FLOORS[f].replace(f + '층 ', '')}</h2><ul>` +
       items.map(d => {
         const c = (S.ASKS[d.id] || []).length; total += c;
-        return `<li><span><a href="#${d.id}">${esc(d.title)}</a>${d.sub ? `<span class="sub">${esc(d.sub)}</span>` : ''}</span><span class="cnt${c ? '' : ' zero'}">${c ? '확인 ' + c : '확인 없음'}</span></li>`;
+        return `<li><span><a href="#${d.id}">${esc(d.title)}</a>${d.sub ? `<span class="sub">${esc(d.sub)}</span>` : ''}</span>${c ? `<span class="cnt">확인 ${c}</span>` : ''}</li>`;
       }).join('') + '</ul></section>';
   }).join('');
   const h = S.home;
