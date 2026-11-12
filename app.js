@@ -166,23 +166,36 @@ function headingText(el) {
     .map(n => n.textContent).join('').trim();
 }
 
-// 각주를 본문에 처음 나온 순서대로 1, 2, 3… 다시 매기기 (나무위키처럼). 원본의 id는 그대로 둔다.
+// 각주를 나무위키처럼 본문에 나오는 차례대로 1, 2, 3… 매기기.
+// 원본에는 출처를 한 번씩만 적어 두고, 화면에서는 인용할 때마다 새 번호를 붙여 아래 목록을 펼친다.
 function renumberFootnotes(root) {
   const lis = $$('.fns li[id]', root);
   if (!lis.length) return;
   const byId = new Map(lis.map(li => [li.id, li]));
-  const order = [];
-  const refs = $$('sup a[href^="#"]', root).filter(a => byId.has(decodeURIComponent(a.getAttribute('href').slice(1))));
-  refs.forEach(a => { const id = decodeURIComponent(a.getAttribute('href').slice(1)); if (!order.includes(id)) order.push(id); });
-  lis.forEach(li => { if (!order.includes(li.id)) order.push(li.id); });
-  const num = new Map(order.map((id, i) => [id, i + 1]));
-  refs.forEach(a => { a.textContent = `[${num.get(decodeURIComponent(a.getAttribute('href').slice(1)))}]`; });
-  order.forEach(id => {
-    const li = byId.get(id), n = num.get(id), t = li.firstChild;
-    if (t && t.nodeType === 3 && /^\s*\[\d+\]/.test(t.textContent)) t.textContent = t.textContent.replace(/^\s*\[\d+\]/, `[${n}]`);
-    else li.insertBefore(document.createTextNode(`[${n}]`), li.firstChild);
-    li.parentNode.appendChild(li);
+  const refOf = a => decodeURIComponent(a.getAttribute('href').slice(1));
+  const refs = $$('sup a[href^="#"]', root).filter(a => byId.has(refOf(a)));
+  const ol = lis[0].parentNode;
+  const content = li => {
+    const c = li.cloneNode(true), t = c.firstChild;
+    if (t && t.nodeType === 3) t.textContent = t.textContent.replace(/^\s*\[\d+\]\s*/, '');
+    return Array.from(c.childNodes);
+  };
+  const out = [], used = new Set();
+  const add = src => {
+    const n = out.length + 1, li = document.createElement('li');
+    li.id = src.id.split('--')[0] + '--note-' + n;
+    li.append(document.createTextNode(`[${n}]`), ...content(src));
+    out.push(li);
+    return li;
+  };
+  refs.forEach(a => {
+    const src = byId.get(refOf(a)); used.add(src.id);
+    const li = add(src);
+    a.setAttribute('href', '#' + li.id);
+    a.textContent = `[${out.length}]`;
   });
+  lis.forEach(li => { if (!used.has(li.id)) add(li); });
+  ol.replaceChildren(...out);
 }
 
 /* 각주 팝업: 본문의 [n]을 누르면(마우스는 올리면) 각주 내용을 바로 보여 준다 */
