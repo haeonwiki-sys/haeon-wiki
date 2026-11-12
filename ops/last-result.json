@@ -1,39 +1,20 @@
 {
- "at": "2026-11-12T18:43:18.941Z",
+ "at": "2026-11-12T18:48:25.528Z",
  "applied": [
+  "boss",
+  "canvas",
+  "cats",
+  "charter",
   "common",
-  "home"
+  "dongheng",
+  "kara",
+  "nuri",
+  "proc",
+  "sinae",
+  "sion",
+  "uijeongbu"
  ],
- "skipped": [
-  {
-   "id": "boss",
-   "reason": "사이트에서 먼저 고친 판이 있습니다 (사이트 5판, 기준 3판)"
-  },
-  {
-   "id": "charter",
-   "reason": "사이트에서 먼저 고친 판이 있습니다 (사이트 7판, 기준 5판)"
-  },
-  {
-   "id": "dongheng",
-   "reason": "사이트에서 먼저 고친 판이 있습니다 (사이트 7판, 기준 5판)"
-  },
-  {
-   "id": "nuri",
-   "reason": "사이트에서 먼저 고친 판이 있습니다 (사이트 5판, 기준 3판)"
-  },
-  {
-   "id": "proc",
-   "reason": "사이트에서 먼저 고친 판이 있습니다 (사이트 5판, 기준 3판)"
-  },
-  {
-   "id": "sion",
-   "reason": "사이트에서 먼저 고친 판이 있습니다 (사이트 5판, 기준 3판)"
-  },
-  {
-   "id": "uijeongbu",
-   "reason": "사이트에서 먼저 고친 판이 있습니다 (사이트 5판, 기준 3판)"
-  }
- ],
+ "skipped": [],
  "exported": 13,
  "error": null
 }
